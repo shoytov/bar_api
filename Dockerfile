@@ -1,5 +1,7 @@
 FROM golang:latest
 
+RUN apt update
+RUN apt install uuid-runtime
 RUN mkdir /app
 ADD . /app/
 WORKDIR /app
