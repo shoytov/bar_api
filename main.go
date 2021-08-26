@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -36,8 +37,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 func addGuest(w http.ResponseWriter, r *http.Request) {
 	// добавление гостя
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusCreated)
 
 	var guest Guest
@@ -57,16 +56,12 @@ func addGuest(w http.ResponseWriter, r *http.Request) {
 func getGuests(w http.ResponseWriter, r *http.Request) {
 	// вывод спсика гостей
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(guests)
 }
 
 func deleteGuests(w http.ResponseWriter, r *http.Request) {
 	// удаление всех гостей
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusNoContent)
 
 	guests = nil
@@ -75,8 +70,6 @@ func deleteGuests(w http.ResponseWriter, r *http.Request) {
 func makeGuestInactive(w http.ResponseWriter, r *http.Request) {
 	// отметка гостя как неактивного/активного
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusNoContent)
 
 	params := mux.Vars(r)
@@ -93,8 +86,6 @@ func makeGuestInactive(w http.ResponseWriter, r *http.Request) {
 func deleteGuest(w http.ResponseWriter, r *http.Request) {
 	// удаление гостя
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusNoContent)
 
 	params := mux.Vars(r)
@@ -109,8 +100,6 @@ func deleteGuest(w http.ResponseWriter, r *http.Request) {
 func addGuestItem(w http.ResponseWriter, r *http.Request) {
 	// добавление покупки гостю
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusCreated)
 
 	params := mux.Vars(r)
@@ -130,8 +119,6 @@ func addGuestItem(w http.ResponseWriter, r *http.Request) {
 func deleteGuestItem(w http.ResponseWriter, r *http.Request) {
 	// удаление покупки у гостя
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusNoContent)
 
 	params := mux.Vars(r)
@@ -158,7 +145,8 @@ func handlerRequests() {
 	r.HandleFunc("/guests/{id}", deleteGuest).Methods("DELETE")
 	r.HandleFunc("/items/{guest_id}", addGuestItem).Methods("POST")
 	r.HandleFunc("/items/{guest_id}/{id}", deleteGuestItem).Methods("DELETE")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	handler := cors.Default().Handler(r)
+	log.Fatal(http.ListenAndServe(":8080", handler))
 }
 
 func main() {
