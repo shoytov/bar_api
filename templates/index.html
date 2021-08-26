@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome Bar API</title>
+</head>
+<body>
+    <div>
+        <h2>Добавление гостя</h2>
+        <p><strong>/guests (POST)</strong></p>
+        <p>
+            payload: {"name": "Имя гостя"}
+        </p>
+    </div>
+
+    <div>
+        <h2>Список всех гостей</h2>
+        <p><strong>/guests (GET)</strong></p>
+    </div>
+
+    <div>
+        <h2>Удалить всех гостей</h2>
+        <p><strong>/guests (DELETE)</strong></p>
+    </div>
+
+    <div>
+        <h2>Сделать гостя активным/неактивным</h2>
+        <p><strong>/guests/{guest_id} (PATCH)</strong></p>
+        <p>
+            payload: {"active": true/false}
+        </p>
+    </div>
+
+    <div>
+        <h2>Удалить гостя</h2>
+        <p><strong>/guests/{guest_id} (DELETE)</strong></p>
+    </div>
+
+    <div>
+        <h2>Добавить гостю покупку</h2>
+        <p><strong>/items/{guest_id} (POST)</strong></p>
+        <p>
+            payload: {"value": 400}
+        </p>
+    </div>
+
+    <div>
+        <h2>Удаление покупки у гостя</h2>
+        <p><strong>/items/{guest_id}/{id} (DELETE)</strong></p>
+    </div>
+</body>
+</html>
