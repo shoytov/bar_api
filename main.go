@@ -23,7 +23,7 @@ type Guest struct {
 
 type Item struct {
 	Id    string `json:"id"`
-	Value uint8  `json:"value"`
+	Value uint16 `json:"value"`
 }
 
 var guests []Guest
@@ -116,6 +116,20 @@ func addGuestItem(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func getGuestItems(w http.ResponseWriter, r *http.Request) {
+	// получение покупок гостя
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(r)
+	for index, guest := range guests {
+		if guest.Id == params["guest_id"] {
+			json.NewEncoder(w).Encode(guests[index].Items)
+			return
+		}
+	}
+	json.NewEncoder(w).Encode(nil)
+}
+
 func deleteGuestItem(w http.ResponseWriter, r *http.Request) {
 	// удаление покупки у гостя
 	w.Header().Set("Content-Type", "application/json")
@@ -143,6 +157,7 @@ func handlerRequests() {
 	r.HandleFunc("/guests", deleteGuests).Methods("DELETE")
 	r.HandleFunc("/guests/{id}", makeGuestInactive).Methods("PATCH")
 	r.HandleFunc("/guests/{id}", deleteGuest).Methods("DELETE")
+	r.HandleFunc("/items/{guest_id}", getGuestItems).Methods("GET")
 	r.HandleFunc("/items/{guest_id}", addGuestItem).Methods("POST")
 	r.HandleFunc("/items/{guest_id}/{id}", deleteGuestItem).Methods("DELETE")
 	handler := cors.Default().Handler(r)
