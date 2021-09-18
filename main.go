@@ -61,7 +61,6 @@ func getGuests(w http.ResponseWriter, r *http.Request) {
 
 func deleteGuests(w http.ResponseWriter, r *http.Request) {
 	// удаление всех гостей
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)
 
 	guests = nil
@@ -154,13 +153,13 @@ func handlerRequests() {
 	r.HandleFunc("/", index)
 	r.HandleFunc("/guests", addGuest).Methods("POST")
 	r.HandleFunc("/guests", getGuests).Methods("GET")
-	r.HandleFunc("/guests", deleteGuests).Methods("DELETE")
+	r.HandleFunc("/guests", deleteGuests).Methods("DELETE", "OPTIONS")
 	r.HandleFunc("/guests/{id}", makeGuestInactive).Methods("PATCH")
 	r.HandleFunc("/guests/{id}", deleteGuest).Methods("DELETE")
 	r.HandleFunc("/items/{guest_id}", getGuestItems).Methods("GET")
 	r.HandleFunc("/items/{guest_id}", addGuestItem).Methods("POST")
 	r.HandleFunc("/items/{guest_id}/{id}", deleteGuestItem).Methods("DELETE")
-	handler := cors.Default().Handler(r)
+	handler := cors.AllowAll().Handler(r)
 	log.Fatal(http.ListenAndServe(":8080", handler))
 }
 

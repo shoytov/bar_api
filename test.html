@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+  <script type="text/javascript">
+    function add() {
+        $.ajax({
+            url: 'http://localhost:8080/guests',
+            type: 'POST',
+            data: JSON.stringify({'name': 'Dima'}),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(result) {
+                alert('yes');
+            },
+            error: function(request,msg,error) {
+                alert('no');
+            }
+        });
+    }
+
+    function del(){
+        $.ajax({
+            url: 'http://localhost:8080/guests',
+            type: 'DELETE',
+            dataType: 'jsonp',
+            crossDomain: true,
+            contentType: "application/json; charset=utf-8",
+            success: function(result) {
+                alert('yes');
+            },
+            error: function(request,msg,error) {
+                alert('no');
+            }
+        });
+    }
+  </script>
+</head>
+<body onload="add()">
+    <a href="javascript:del();">УДАЛИТЬ</a>
+</body>
+</html>
